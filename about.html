@@ -1,11 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us</title>
+  <meta charset="UTF-8">
+  <title>PuzzlePix - About</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      font-family: 'Fredoka One', cursive;
+      background: linear-gradient(135deg, #fff2cc, #ffd699);
+      overflow-x: hidden;
+    }
+
+    .content {
+      flex: 1;
+      text-align: center;
+      position: relative;
+      padding-top: 80px;
+      z-index: 2;
+    }
+
+    h1 {
+      font-size: 48px;
+      color: #ff6600;
+      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+      margin-bottom: 20px;
+    }
+
+    .info {
+      max-width: 700px;
+      margin: 0 auto 40px;
+      font-size: 18px;
+      line-height: 1.8;
+      text-align: left;
+      background-color: rgba(255, 255, 255, 0.7);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      border-left: 5px solid #ff9900;
+      color: #4d2600;
+      position: relative;
+      z-index: 2;
+    }
+
+    .info p, .info ul {
+      margin-bottom: 15px;
+    }
+
+    .info strong {
+      color: #ff6600;
+    }
+
+    .info ul {
+      list-style-position: inside;
+      padding-left: 20px;
+    }
+
+    .info li {
+      margin-bottom: 8px;
+    }
+
+    .button {
+      padding: 15px 30px;
+      font-size: 20px;
+      background-color: #ff9900;
+      color: #fff;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      margin: 10px auto;
+      display: inline-block;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .button:hover {
+      background-color: #e67e00;
+      transform: scale(1.05);
+    }
+
+    .bubble {
+      position: absolute;
+      background: radial-gradient(circle, #fae4c2 30%, #ffcc66 100%);
+      border-radius: 50%;
+      opacity: 0.6;
+      animation: float 8s infinite ease-in-out;
+      z-index: 1;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    .small { width: 30px; height: 30px; }
+    .medium { width: 60px; height: 60px; }
+    .large { width: 100px; height: 100px; }
+
+    .footer-content {
+      text-align: center;
+      font-size: 16px;
+      color: #4d2600;
+      background: rgba(255, 242, 204, 0.8);
+      padding: 10px 20px;
+      border-radius: 10px;
+      position: relative;
+      z-index: 2;
+    }
+
+    footer {
+      margin-top: auto;
+      padding: 20px;
+    }
+
+    /* Home icon */
+    .home-icon {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      font-size: 36px;
+      color: #ff9900;
+      background: #fff7e0;
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 999;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      text-decoration: none;
+    }
+  </style>
 </head>
 <body>
+  <!-- Bubbles -->
+  <div class="bubble small" style="top:10%; left:10%;"></div>
+  <div class="bubble medium" style="top:20%; left:80%;"></div>
+  <div class="bubble large" style="top:35%; left:60%;"></div>
+  <div class="bubble small" style="top:70%; left:15%;"></div>
+  <div class="bubble medium" style="top:80%; left:85%;"></div>
+  <div class="bubble large" style="top:25%; left:45%;"></div>
+  <div class="bubble small" style="top:55%; left:20%;"></div>
+  <div class="bubble medium" style="top:60%; left:75%;"></div>
+  <div class="bubble large" style="top:15%; left:50%;"></div>
+
+  <div class="content">
+    <h1>About PuzzlePix</h1>
+    <div class="info">
+      <p><strong>What is PuzzlePix?</strong></p>
+      <p>PuzzlePix is a picture-based word association game inspired by the mechanics of 4 Pics 1 Word, but with an engaging twist designed for elderly users. In each round, players are shown 4 related photos and must guess the common word that connects them. However, unlike the traditional version, PuzzlePix introduces a fun twist. Instead of immediately seeing all 4 photos, players reveal the images one by one by solving mini visual puzzles. After revealing enough images, they can guess the connecting word.</p>
+      
+      <p><strong>How to Play:</strong></p>
+      <ul>
+        <li>Observe the 4 images carefully.</li>
+        <li>Type the word that connects them in the input box.</li>
+        <li>Click "Check Answer" to see if you're right.</li>
+        <li>If you're stuck, click "Reveal Hint" or try "Give Up" to see the answer.</li>
+      </ul>
+      
+      <p><strong>Project Info:</strong></p>
+      <p>This game was created as part of a school project to demonstrate basic web development skills including HTML, CSS, and JavaScript.</p>
+      
+      <p><strong>Developer:</strong> Clint Aldrich A. Reyes</p>
+    </div>
     
+    <a href="index.html" class="button" onclick="playClick()">Back to Home</a>
+  </div>
+
+  <!-- Sounds -->
+  <audio id="clickSound" src="sounds/click.mp3"></audio>
+
+  <script>
+    const clickSound = document.getElementById('clickSound');
+    
+    function playClick() {
+      clickSound.currentTime = 0;
+      clickSound.play();
+    }
+  </script>
 </body>
 </html>

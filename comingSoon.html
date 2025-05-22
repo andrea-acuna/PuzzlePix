@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Coming Soon</title>
+<style>
+  /* Your provided CSS */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Fredoka One', cursive;
+    background: linear-gradient(135deg, #fff2cc, #ffd699);
+    overflow-x: hidden;
+  }
+
+  .content {
+    flex: 1;
+    text-align: center;
+    position: relative;
+    padding-top: 80px;
+  }
+
+  header { position: relative; z-index: 2; }
+
+  h1 {
+    font-size: 64px;
+    color: #ff6600;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+    padding-top: 50px;
+  }
+
+  p {
+    font-size: 24px;
+    color: #4d2600;
+    max-width: 700px;
+    margin: 20px auto 40px;
+  }
+
+  .button {
+    padding: 18px 36px;
+    font-size: 24px;
+    background-color: #ff9900;
+    color: #fff;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    margin: 10px auto;
+    display: block;
+    width: 250px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  }
+
+  .button.secondary {
+    font-size: 18px;
+    padding: 12px 24px;
+    width: 180px;
+  }
+
+  .button:hover {
+    background-color: #e67e00;
+    transform: scale(1.05);
+  }
+
+  .bubble {
+    position: absolute;
+    background: radial-gradient(circle, #fae4c2 30%, #ffcc66 100%);
+    border-radius: 50%;
+    opacity: 0.6;
+    animation: float 8s infinite ease-in-out;
+    z-index: 1;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+  }
+
+  .small { width: 30px; height: 30px; }
+  .medium { width: 60px; height: 60px; }
+  .large { width: 100px; height: 100px; }
+
+  .footer-content {
+    text-align: center;
+    font-size: 16px;
+    color: #4d2600;
+    background: rgba(255, 242, 204, 0.8);
+    padding: 10px 20px;
+    border-radius: 10px;
+    position: relative;
+    z-index: 2;
+  }
+
+  footer {
+    margin-top: auto;
+  }
+</style>
+</head>
+<body>
+
+<div class="content">
+  <header>
+    <h1>Coming Soon</h1>
+  </header>
+  <p>We’re working hard to bring you something amazing. <br>Stay tuned!</p>
+  <button class="button" onclick="alert('Thanks for your interest! We will notify you soon.')">Notify Me</button>
+
+  <!-- Floating bubbles -->
+  <div class="bubble small" style="top: 20%; left: 15%; animation-delay: 0s;"></div>
+  <div class="bubble medium" style="top: 50%; left: 80%; animation-delay: 3s;"></div>
+  <div class="bubble large" style="top: 75%; left: 40%; animation-delay: 5s;"></div>
+  <div class="bubble small" style="top: 30%; left: 65%; animation-delay: 2s;"></div>
+  <div class="bubble medium" style="top: 60%; left: 20%; animation-delay: 4s;"></div>
+</div>
+
+<footer>
+  <div class="footer-content">&copy; 2025 PuzzlePix. All Rights Reserved.</div>
+</footer>
+
+</body>
+</html>

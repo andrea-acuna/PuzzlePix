@@ -1,11 +1,303 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Category</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Categories - PuzzlePix</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      font-family: 'Fredoka One', cursive;
+      background: linear-gradient(135deg, #fff2cc, #ffd699);
+      overflow-x: hidden;
+    }
+
+    header {
+      text-align: center;
+      padding: 40px 20px 10px;
+      font-size: 48px;
+      color: #ff6600;
+      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+      z-index: 2;
+      position: relative;
+    }
+
+    .content {
+      flex: 1;
+      padding: 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .category-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        padding: 20px;
+    }
+
+
+    .category-card {
+      flex: 0 0 auto;
+      width: 250px;
+      height: 300px;
+      background: #fff7e0;
+      border-radius: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      text-align: center;
+      scroll-snap-align: start;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .category-card:hover {
+      transform: scale(1.05);
+    }
+
+    .category-card img {
+      width: 100%;
+      height: 180px;
+      border-radius: 20px 20px 0 0;
+      object-fit: cover;
+    }
+
+    .category-name {
+      font-size: 24px;
+      color: #4d2600;
+      padding: 15px;
+    }
+
+
+    .category-desc {
+        font-size: 12px;
+        color: #7a4a00;
+        padding: 0 10px 10px;
+        line-height: 1.4;
+    }
+
+
+    /* Bubble background effect */
+    .bubble {
+      position: absolute;
+      background: radial-gradient(circle, #fae4c2 30%, #ffcc66 100%);
+      border-radius: 50%;
+      opacity: 0.6;
+      animation: float 8s infinite ease-in-out;
+      z-index: 1;
+    }
+
+    #homeIcon {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      font-size: 36px;
+      color: #ff9900;
+      background: #fff7e0;
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 999;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    /* Settings Icon */
+    .settings-icon {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      font-size: 36px;
+      color: #ff9900;
+      background: #fff7e0;
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 999;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 998;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+    }
+
+    .modal-content {
+      background: #fff8e1;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 20px;
+      width: 80%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .modal-content h2 {
+      margin-bottom: 20px;
+      font-size: 28px;
+    }
+
+    .modal-content label {
+      font-size: 18px;
+      display: block;
+      margin: 10px 0;
+    }
+
+    .close {
+      float: right;
+      font-size: 28px;
+      cursor: pointer;
+      color: #aa0000;
+    }
+
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    .small { width: 30px; height: 30px; }
+    .medium { width: 60px; height: 60px; }
+    .large { width: 100px; height: 100px; }
+
+    footer {
+      text-align: center;
+      font-size: 16px;
+      color: #4d2600;
+      background: rgba(255, 242, 204, 0.8);
+      padding: 10px 20px;
+      border-radius: 10px;
+      z-index: 2;
+      position: relative;
+      margin-top: auto;
+    }
+  </style>
 </head>
 <body>
-    
+
+    <!-- Icon -->
+  <i class="ph ph-gear settings-icon" onclick="openModal(); playClick()"></i>
+  <i class="ph ph-house" id="homeIcon" onclick="goHome(); playClick()" ></i>
+
+
+  <!-- Bubble background -->
+  <div class="bubble small" style="top: 10%; left: 20%;"></div>
+  <div class="bubble medium" style="top: 40%; left: 80%;"></div>
+  <div class="bubble large" style="top: 70%; left: 50%;"></div>
+  <div class="bubble medium" style="top: 20%; left: 60%;"></div>
+
+  <!-- Page header -->
+  <header>Game Categories</header>
+
+  <!-- Main content -->
+  <div class="content"> 
+    <div class="category-container">
+        <div class="category-card" onclick="location.href='nostalgia.html'">
+            <img src="images/nostalgia.jpg" alt="Nostalgia">
+            <div class="category-name">Nostalgia</div>
+            <p class="category-desc">Classic themes and vintage images from the good old days.</p>
+        </div>
+
+        <div class="category-card" onclick="location.href='nature.html'">
+            <img src="images/nature.jpg" alt="Nature">
+            <div class="category-name">Nature</div>
+            <p class="category-desc">Beautiful scenes from forests, beaches, and gardens.</p>
+        </div>
+
+        <div class="category-card" onclick="location.href='memories.html'">
+            <img src="images/animals.jpg" alt="Animals">
+            <div class="category-name">Animals</div>
+            <p class="category-desc">Furry, feathered, and scaly friends from jungles, farms, and oceans.</p>
+        </div>
+
+        <div class="category-card" onclick="location.href='objects-at-home.html'">
+            <img src="images/objects.jpg" alt="Objects at Home">
+            <div class="category-name">Objects at Home</div>
+            <p class="category-desc">Familiar things from around the house and daily life.</p>
+        </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="settingsModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal(); playClick()">&times;</span>
+      <h2>Settings</h2>
+      <label><input type="checkbox" id="muteMusic"> Mute Music</label>
+      <label><input type="checkbox" id="muteSounds"> Mute Sounds</label>
+      <label>Background:
+        <select onchange="changeBackground(this.value)">
+          <option value="#fff2cc,#ffd699">Peach</option>
+          <option value="#ccf2ff,#99ddff">Blue</option>
+          <option value="#e6ffe6,#b3ffb3">Green</option>
+        </select>
+      </label>
+    </div>
+  </div>
+
+  <!-- Sounds -->
+  <audio id="bgMusic" src="sounds/bgMusic.mp3" loop autoplay></audio>
+  <audio id="clickSound" src="sounds/click.mp3"></audio>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2025 PuzzlePix. All Rights Reserved.
+  </footer>
+
+  <script>
+    const bgMusic = document.getElementById('bgMusic');
+    const clickSound = document.getElementById('clickSound');
+
+    document.getElementById('muteMusic').addEventListener('change', function () {
+      bgMusic.muted = this.checked;
+    });
+
+    document.getElementById('muteSounds').addEventListener('change', function () {
+      clickSound.muted = this.checked;
+    });
+
+    function playClick() {
+      clickSound.currentTime = 0;
+      clickSound.play();
+    }
+
+    function openModal() {
+      document.getElementById('settingsModal').style.display = 'block';
+    }
+
+    function closeModal() {
+      document.getElementById('settingsModal').style.display = 'none';
+    }
+
+    window.onclick = function (event) {
+      const modal = document.getElementById('settingsModal');
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    };
+
+    function changeBackground(val) {
+      document.body.style.background = `linear-gradient(135deg, ${val})`;
+    }
+
+    function goHome() {
+      window.location.href = "index.html";  
+    }
+
+  </script>
 </body>
 </html>

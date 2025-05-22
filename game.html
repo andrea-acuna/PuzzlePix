@@ -6,17 +6,22 @@
   <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
     body {
-      font-family: 'Fredoka One', cursive;
       background: linear-gradient(to bottom right, #fff7e6, #ffe0b3);
+      font-family: 'Fredoka One', cursive;
       color: #3b2f00;
       text-align: center;
-      padding: 30px;
       overflow-x: hidden;
       overflow-y: auto;
     }
 
     h1 {
+      padding-top: 70px;
       font-size: 40px;
       margin-bottom: 10px;
       color: #cc6600;
@@ -94,6 +99,7 @@
       border: none;
       border-radius: 12px;
       cursor: pointer;
+      margin-bottom: 50px;
     }
 
     button:disabled {
@@ -106,7 +112,8 @@
     }
 
     .message {
-      margin-top: 20px;
+      margin-top: 10px;
+      margin-bottom: 10px;
       font-size: 24px;
       font-weight: bold;
     }
@@ -219,6 +226,22 @@
       cursor: pointer;
       color: #aa0000;
     }
+
+  .footer-content {
+    text-align: center;
+    font-size: 16px;
+    color: #4d2600;
+    background: rgba(255, 242, 204, 0.8);
+    padding: 10px 20px;
+    border-radius: 10px;
+    position: relative;
+    z-index: 2;
+  }
+
+  footer {
+    margin-top: auto;
+  }
+
   </style>
 </head>
 <body>
@@ -227,63 +250,79 @@
   <i class="ph ph-gear settings-icon" onclick="openModal(); playClick()"></i>
   <i class="ph ph-house" id="homeIcon" onclick="goHome(); playClick()" ></i>
 
+  <div id="mainGame">
+    <h1>PuzzlePix</h1>
+    <p class="instruction">Guess the word based on the images. Rotate each piece to solve the puzzle.</p>
+    <div id="hint"></div>
+
+    <p id="points">Points: 0</p>
+
+    <!-- message and splash art-->
+    <p id="message" class="message"></p>
+    <div id="splashArt">Good Job!</div>
+    <div id="wrongSplashArt">Wrong Answer!</div>
+
+    <div id="imageGrid" class="images"></div>
+    <div id="finalImages" class="images" style="display:none;"></div>
     
-  <h1>PuzzlePix</h1>
-  <p class="instruction">Guess the word based on the images. Rotate each piece to solve the puzzle.</p>
-  <div id="hint"></div>
 
-  <p id="points">Points: 0</p>
-  <div id="imageGrid" class="images"></div>
-  <div id="finalImages" class="images" style="display:none;"></div>
-  
-
-  <div class="input-area">
-    <button id="answerNowBtn" onclick="showFinalImages(); playClick()">Answer Now</button>
-    <button onclick="giveUp(); playClick()">Give Up</button>
-    <button id="nextBtn" onclick="nextProblem(); playClick()" disabled>Next</button>
-    <button onclick="skipPuzzle(); playClick()">Skip</button>
-  </div>
-
-  
-
-  <!-- Hide the input section initially for mini puzzle -->
-  <div id="inputSection" style="display:none;">
-    <input type="text" id="guess" placeholder="Enter your guess">
-    <button id="submitBtn" onclick="checkAnswer(); playClick()" disabled>Submit</button>
-    <button id="clearBtn" onclick="clearAnswer(); playClick()">Clear</button>
-  </div>
-
-  <!-- message and splash art-->
-  <p id="message" class="message"></p>
-  <div id="splashArt">Good Job!</div>
-  <div id="wrongSplashArt">Wrong Answer!</div>
-
-  <!-- audiors -->
-  <audio id="revealSound" src="sounds/hint.mp3" preload="auto"></audio>
-  <audio id="correctSound" src="sounds/correct.mp3" preload="auto"></audio>
-  <audio id="wrongSound" src="sounds/wrong.mp3" preload="auto"></audio>
-  <audio id="bgMusic" src="sounds/bgMusic.mp3" loop autoplay></audio>
-  <audio id="clickSound" src="sounds/click.mp3"></audio>
-
-
-  <!-- Modal for settings -->
-  <div id="settingsModal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeModal(); playClick()">&times;</span>
-      <h2>Settings</h2>
-      <label><input type="checkbox" id="muteMusic"> Mute Music</label>
-      <label><input type="checkbox" id="muteSounds"> Mute Sounds</label>
-      <label>Background:
-        <select onchange="changeBackground(this.value)">
-          <option value="#fff2cc,#ffd699">Peach</option>
-          <option value="#ccf2ff,#99ddff">Blue</option>
-          <option value="#e6ffe6,#b3ffb3">Green</option>
-        </select>
-      </label>
+    <div class="input-area">
+      <button id="answerNowBtn" onclick="showFinalImages(); playClick()">Answer Now</button>
+      <button id="nextBtn" onclick="nextProblem(); playClick()" disabled>Next</button>
+      <button id="skipbtn" onclick="skipPuzzle(); playClick()">Skip</button>
     </div>
+
+    
+
+    <!-- Hide the input section initially for mini puzzle -->
+    <div id="inputSection" style="display:none;">
+      <input type="text" id="guess" placeholder="Enter your guess">
+      <button id="submitBtn" onclick="checkAnswer(); playClick()" disabled>Submit</button>
+      <button id="clearBtn" onclick="clearAnswer(); playClick()">Clear</button>
+    </div>
+
+    
+
+    <!-- audiors -->
+    <audio id="revealSound" src="sounds/hint.mp3" preload="auto"></audio>
+    <audio id="correctSound" src="sounds/correct.mp3" preload="auto"></audio>
+    <audio id="wrongSound" src="sounds/wrong.mp3" preload="auto"></audio>
+    <audio id="bgMusic" src="sounds/bgMusic.mp3" loop autoplay></audio>
+    <audio id="clickSound" src="sounds/click.mp3"></audio>
+   
   </div>
 
- 
+   <!-- Modal for settings -->
+    <div id="settingsModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal(); playClick()">&times;</span>
+        <h2>Settings</h2>
+        <label><input type="checkbox" id="muteMusic"> Mute Music</label>
+        <label><input type="checkbox" id="muteSounds"> Mute Sounds</label>
+        <label>Background:
+          <select onchange="changeBackground(this.value)">
+            <option value="#fff2cc,#ffd699">Peach</option>
+            <option value="#ccf2ff,#99ddff">Blue</option>
+            <option value="#e6ffe6,#b3ffb3">Green</option>
+          </select>
+        </label>
+      </div>
+    </div>
+  
+
+  <div id="congratsScreen" style="display:none; align-items:center; justify-content:center; height:100vh; flex-direction:column; background:#f7dab4; text-align:center;">
+    <h1 style="font-size: 3rem; color: #ff9900;">🎉 Congratulations! 🎉</h1>
+    <p style="font-size: 1.5rem;">You finished all puzzles!</p>
+    <button onclick="window.location.reload()" style="margin: 10px; padding: 12px 24px; font-size: 1rem;">Play Again</button>
+    <button onclick="window.location.href='comingSoon.html'" style="margin: 10px; padding: 12px 24px; font-size: 1rem;">Next Level</button>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      &copy; 2025 PuzzlePix. All Rights Reserved.
+    </div>
+  </footer>
+
 
   <script>
     //Settings
@@ -453,33 +492,38 @@
     }
 
     function checkAnswer() {
-      const userAnswer = document.getElementById('guess').value.toLowerCase();
+      const userAnswer = document.getElementById('guess').value.toLowerCase().trim();
       const correctAnswer = variations[currentVariation].answer;
 
       if (userAnswer === correctAnswer) {
         document.getElementById('correctSound').play();
         points++;
         document.getElementById('points').textContent = `Points: ${points}`;
+        document.getElementById('message').textContent = "Correct!";
         document.getElementById('splashArt').style.display = 'flex';
+
         setTimeout(() => {
           document.getElementById('splashArt').style.display = 'none';
-        }, 2000);
-        document.getElementById('nextBtn').disabled = false;
+
+          if (currentVariation === variations.length - 1) {
+            showEndGameScreen();
+          } else {
+            document.getElementById('nextBtn').disabled = false;
+          }
+        }, 1500);
+
+
         document.getElementById('submitBtn').disabled = true;
         document.getElementById('guess').disabled = true;
       } else {
         document.getElementById('wrongSound').play();
+        document.getElementById('message').textContent = "Try Again!";
         document.getElementById('wrongSplashArt').style.display = 'flex';
+
         setTimeout(() => {
           document.getElementById('wrongSplashArt').style.display = 'none';
-        }, 2000);
+        }, 1200);
       }
-    }
-
-    function giveUp() {
-      document.getElementById('message').textContent = `Answer was: ${variations[currentVariation].answer}`;
-      document.getElementById('submitBtn').disabled = true;
-      document.getElementById('nextBtn').disabled = false;
     }
 
     function nextProblem() {
@@ -489,6 +533,8 @@
     }
 
     function skipPuzzle() {
+      document.getElementById('message').textContent = `Answer was: ${variations[currentVariation].answer}`;
+
       document.getElementById('message').textContent = "Skipped!";
       nextProblem();
     }
@@ -504,6 +550,15 @@
         if (music.paused) music.play();
       }, { once: true });
     });
+
+function showEndGameScreen() {
+  // Hide everything else
+  document.getElementById('mainGame').style.display = 'none';
+
+  // Show the congratulations screen
+  document.getElementById('congratsScreen').style.display = 'flex';
+}
+
   </script>
 </body>
 </html>

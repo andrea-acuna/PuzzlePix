@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Objects at Home - PuzzlePix</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: linear-gradient(to bottom right, #fff7e6, #ffe0b3);
+      font-family: 'Fredoka One', cursive;
+      color: #3b2f00;
+      text-align: center;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    h1 {
+      padding-top: 70px;
+      font-size: 40px;
+      margin-bottom: 10px;
+      color: #cc6600;
+    }
+
+    .instruction {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    #hint {
+      font-size: 22px;
+      margin-bottom: 15px;
+      color: #5a4500;
+    }
+
+    .images {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      justify-items: center;
+      margin-bottom: 30px;
+      max-width: 640px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 0 10px;
+    }
+
+    .puzzle {
+      width: 300px;
+      height: 300px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 2px;
+      border-radius: 16px;
+      border: 4px solid #ffd480;
+      background: white;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .piece {
+      width: 100%;
+      height: 100%;
+      background-size: 200% 200%;
+      background-repeat: no-repeat;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    .hidden-piece {
+      filter: blur(6px);
+    }
+
+    .input-area {
+      margin-top: 10px;
+    }
+
+    input[type="text"] {
+      padding: 14px;
+      font-size: 22px;
+      width: 300px;
+      border-radius: 12px;
+      border: 2px solid #cc6600;
+    }
+
+    button {
+      padding: 12px 24px;
+      font-size: 18px;
+      margin: 6px;
+      margin-top: 15px;
+      background-color: #ffaa00;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      margin-bottom: 50px;
+    }
+
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    button:hover:enabled {
+      background-color: #e69500;
+    }
+
+    .message {
+      margin-top: 10px;
+      margin-bottom: 10px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    #splashArt {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 220, 140, 0.85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 60px;
+      font-weight: bold;
+      color: #cc6600;
+      z-index: 9999;
+    }
+
+    #wrongSplashArt {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 0, 0, 0.85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 60px;
+      font-weight: bold;
+      color: white;
+      z-index: 9999;
+    }
+
+    #points {
+      font-size: 20px;
+      margin-top: 10px;
+      color: #663300;
+    }
+
+    /* Settings Icon */
+    .settings-icon {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      font-size: 36px;
+      color: #ff9900;
+      background: #fff7e0;
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 999;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    #homeIcon {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      font-size: 36px;
+      color: #ff9900;
+      background: #fff7e0;
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 999;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 998;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+    }
+
+    .modal-content {
+      background: #fff8e1;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 20px;
+      width: 80%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .modal-content h2 {
+      margin-bottom: 20px;
+      font-size: 28px;
+    }
+
+    .modal-content label {
+      font-size: 18px;
+      display: block;
+      margin: 10px 0;
+    }
+
+    .close {
+      float: right;
+      font-size: 28px;
+      cursor: pointer;
+      color: #aa0000;
+    }
+
+  .footer-content {
+    text-align: center;
+    font-size: 16px;
+    color: #4d2600;
+    background: rgba(255, 242, 204, 0.8);
+    padding: 10px 20px;
+    border-radius: 10px;
+    position: relative;
+    z-index: 2;
+  }
+
+  footer {
+    margin-top: auto;
+  }
+
+  </style>
+</head>
+<body>
+
+  <!-- Icon -->
+  <i class="ph ph-gear settings-icon" onclick="openModal(); playClick()"></i>
+  <i class="ph ph-house" id="homeIcon" onclick="goHome(); playClick()" ></i>
+
+  <div id="mainGame">
+    <h1>PuzzlePix</h1>
+    <p class="instruction">Guess the word based on the images. Rotate each piece to solve the puzzle.</p>
+    <div id="hint"></div>
+
+    <p id="points">Points: 0</p>
+
+    <!-- message and splash art-->
+    <p id="message" class="message"></p>
+    <div id="splashArt">Good Job!</div>
+    <div id="wrongSplashArt">Wrong Answer!</div>
+
+    <div id="imageGrid" class="images"></div>
+    <div id="finalImages" class="images" style="display:none;"></div>
+    
+
+    <div class="input-area">
+      <button id="answerNowBtn" onclick="showFinalImages(); playClick()">Answer Now</button>
+      <button id="nextBtn" onclick="nextProblem(); playClick()" disabled>Next</button>
+      <button id="skipbtn" onclick="skipPuzzle(); playClick()">Skip</button>
+    </div>
+
+    
+
+    <!-- Hide the input section initially for mini puzzle -->
+    <div id="inputSection" style="display:none;">
+      <input type="text" id="guess" placeholder="Enter your guess">
+      <button id="submitBtn" onclick="checkAnswer(); playClick()" disabled>Submit</button>
+      <button id="clearBtn" onclick="clearAnswer(); playClick()">Clear</button>
+    </div>
+
+    
+
+    <!-- audiors -->
+    <audio id="revealSound" src="sounds/hint.mp3" preload="auto"></audio>
+    <audio id="correctSound" src="sounds/correct.mp3" preload="auto"></audio>
+    <audio id="wrongSound" src="sounds/wrong.mp3" preload="auto"></audio>
+    <audio id="bgMusic" src="sounds/bgMusic.mp3" loop autoplay></audio>
+    <audio id="clickSound" src="sounds/click.mp3"></audio>
+   
+  </div>
+
+   <!-- Modal for settings -->
+    <div id="settingsModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal(); playClick()">&times;</span>
+        <h2>Settings</h2>
+        <label><input type="checkbox" id="muteMusic"> Mute Music</label>
+        <label><input type="checkbox" id="muteSounds"> Mute Sounds</label>
+        <label>Background:
+          <select onchange="changeBackground(this.value)">
+            <option value="#fff2cc,#ffd699">Peach</option>
+            <option value="#ccf2ff,#99ddff">Blue</option>
+            <option value="#e6ffe6,#b3ffb3">Green</option>
+          </select>
+        </label>
+      </div>
+    </div>
+  
+
+  <div id="congratsScreen" style="display:none; align-items:center; justify-content:center; height:100vh; flex-direction:column; background:#f7dab4; text-align:center;">
+    <h1 style="font-size: 3rem; color: #ff9900;">🎉 Congratulations! 🎉</h1>
+    <p style="font-size: 1.5rem;">You finished all puzzles!</p>
+    <button onclick="window.location.reload()" style="margin: 10px; padding: 12px 24px; font-size: 1rem;">Play Again</button>
+    <button onclick="window.location.href='nextLevel.html'" style="margin: 10px; padding: 12px 24px; font-size: 1rem;">Next Level</button>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      &copy; 2025 PuzzlePix. All Rights Reserved.
+    </div>
+  </footer>
+
+
+  <script>
+    //Settings
+    const bgMusic = document.getElementById('bgMusic');
+    const clickSound = document.getElementById('clickSound');
+
+    document.getElementById('muteMusic').addEventListener('change', function () {
+      bgMusic.muted = this.checked;
+    });
+
+    document.getElementById('muteSounds').addEventListener('change', function () {
+      clickSound.muted = this.checked;
+    });
+
+    function playClick() {
+      clickSound.currentTime = 0;
+      clickSound.play();
+    }
+
+
+    function openModal() {
+      document.getElementById('settingsModal').style.display = 'block';
+    }
+
+    function closeModal() {
+      document.getElementById('settingsModal').style.display = 'none';
+    }
+
+    window.onclick = function (event) {
+      const modal = document.getElementById('settingsModal');
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    };
+
+    function changeBackground(val) {
+      document.body.style.background = `linear-gradient(135deg, ${val})`;
+    }
+
+    function goHome() {
+      window.location.href = "index.html";  
+    }
+
+
+
+    //Main Panel
+    const variations = [
+      {
+        answer: "clock",
+        hint: "Hint: You check me every morning to see if you're late.",
+        images: ['https://img.freepik.com/premium-photo/close-up-clock-hands-toned-blue_266732-26180.jpg', 'https://static.vecteezy.com/system/resources/previews/016/625/418/original/hand-drawn-numbers-one-to-ten-number-bullets-on-circle-shapes-free-vector.jpg', 'https://cdn20.pamono.com/p/z/1/4/1478849_dsrm1jx9yl/painted-wood-wall-mounted-object-from-erik-lagoni-jakobsen-denmark-1968-9.jpg', 'https://thumbs.dreamstime.com/b/alarm-clock-ringing-o-clock-morning-32319516.jpg']
+      },
+      {
+        answer: "closet",
+        hint: "Hint: You find your jackets and shirts inside me.",
+        images: ['https://i.pinimg.com/originals/da/ee/6a/daee6a30f6ac7917dbc7bc543c644322.jpg', 'https://5.imimg.com/data5/SELLER/Default/2024/2/393193550/JO/FJ/IH/46513935/intimates-swimwear-bra-blouse-inner-wear-display-hangers-500x500.jpg', 'https://i5.walmartimages.com/asr/ab18bd21-a5ba-451f-b625-ef68e186dfbd.710a74505b64d60c8d263c0b696461d8.jpeg?odnWidth=1000&odnHeight=1000&odnBg=ffffff', 'https://tse2.mm.bing.net/th?id=OIP.WjaIZnD0lWWiKmJ--wTxEwHaHa&pid=Api&P=0&h=180']
+      },
+      {
+        answer: "keyboard",
+        hint: "Hint: You use me to type messages and emails.",
+        images: ['https://typingdonewell.com/wp-content/uploads/2022/05/qwerty-1024x341.png', 'https://tse3.mm.bing.net/th?id=OIP.Fu6Ad-5MhVXuJBDbSUii7AHaE8&pid=Api&P=0&h=180', 'https://3.imimg.com/data3/RY/NA/MY-16505656/laptop-keyboard-500x500.jpg', 'https://citizenside.com/wp-content/uploads/2023/10/9-best-backlit-gaming-keyboard-for-2023-1697761438.jpg']
+      },
+      {
+        answer: "book",
+        hint: "Hint: You turn my pages to read my contents.",
+        images: ['https://st2.depositphotos.com/1177973/8206/i/450/depositphotos_82064462-stock-photo-stack-of-books-on-shelf.jpg', 'https://c.pxhere.com/photos/81/39/book_pages_background_open_book_text_page_letters-340934.jpg!d', 'https://tse4.mm.bing.net/th?id=OIP.N2VV74ZPDnhTE06ExbbANgHaHa&pid=Api&P=0&h=180', 'https://as2.ftcdn.net/v2/jpg/03/40/07/85/1000_F_340078556_YD52qpLaiTbO5E0OF90FuOaAq3sZr8yF.jpg']
+      },
+      {
+        answer: "refrigerator",
+        hint: "Hint: You open me to keep your food cold.",
+        images: ['https://builtbykids.com/wp-content/uploads/2013/02/GettyImages-964892062.jpg', 'https://media.istockphoto.com/id/1173710987/photo/temperature-control-knob-in-refrigerators.jpg?s=612x612&w=0&k=20&c=_uhNF3jkfc6CeahLjL0CsX1nm9s4XedOGmopVbpCOI4=', 'https://www.shutterstock.com/image-photo/fridge-dairy-products-eggs-260nw-2515013463.jpg']
+      }
+    ];
+
+
+    let currentVariation = 0;
+    let currentImageIndex = 0;
+    let rotationsCompleted = 0;
+    let points = 0;
+
+    function loadVariation() {
+      const v = variations[currentVariation];
+      document.getElementById('hint').textContent = v.hint;
+      document.getElementById('message').textContent = '';
+      document.getElementById('guess').value = '';
+      document.getElementById('guess').disabled = true;
+      document.getElementById('submitBtn').disabled = true;
+      document.getElementById('nextBtn').disabled = true;
+      document.getElementById('answerNowBtn').disabled = false;
+      rotationsCompleted = 0;
+      document.getElementById('finalImages').style.display = 'none';
+      document.getElementById('imageGrid').style.display = 'grid';
+
+      document.getElementById('inputSection').style.display = 'none';
+
+      const container = document.getElementById('imageGrid');
+      container.innerHTML = '';
+
+      const currentImage = v.images[currentImageIndex];
+      const puzzle = document.createElement('div');
+      puzzle.className = 'puzzle';
+
+      for (let y = 0; y < 2; y++) {
+        for (let x = 0; x < 2; x++) {
+          const piece = document.createElement('div');
+          piece.className = 'piece hidden-piece';
+          piece.style.backgroundImage = `url(${currentImage})`;
+          piece.style.backgroundSize = '200% 200%';
+          piece.style.backgroundPosition = `${x * 100}% ${y * 100}%`;
+
+          let rotation = Math.floor(Math.random() * 4) * 90;
+          piece.style.transform = `rotate(${rotation}deg)`;
+
+          piece.onclick = () => {
+            rotation = (rotation + 90) % 360;
+            piece.style.transform = `rotate(${rotation}deg)`;
+
+            if (rotation === 0) {
+              piece.classList.remove('hidden-piece');
+              piece.onclick = null;
+              rotationsCompleted++;
+              if (rotationsCompleted === 4) {
+                if (currentImageIndex < 3) {
+                  currentImageIndex++;
+                  loadVariation();
+                } else {
+                  document.getElementById('revealSound').play();
+                  showFinalImages();
+                }
+              }
+            }
+          };
+
+          puzzle.appendChild(piece);
+        }
+      }
+
+      container.appendChild(puzzle);
+    }
+
+    function showFinalImages() {
+      const v = variations[currentVariation];
+      document.getElementById('imageGrid').style.display = 'none';
+      const finalImages = document.getElementById('finalImages');
+      finalImages.innerHTML = '';
+      finalImages.style.display = 'grid';
+
+      v.images.forEach(src => {
+        const img = document.createElement('img');
+        img.src = src;
+        img.style.width = '300px';
+        img.style.height = '300px';
+        img.style.objectFit = 'cover';
+        img.style.borderRadius = '16px';
+        img.style.border = '4px solid #ffd480';
+        img.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
+        finalImages.appendChild(img);
+      });
+
+      // Show input section now
+      document.getElementById('inputSection').style.display = 'block';
+
+      document.getElementById('guess').disabled = false;
+      document.getElementById('submitBtn').disabled = false;
+      document.getElementById('answerNowBtn').disabled = true;
+      document.getElementById('guess').focus();
+    }
+
+    function checkAnswer() {
+      const userAnswer = document.getElementById('guess').value.toLowerCase().trim();
+      const correctAnswer = variations[currentVariation].answer;
+
+      if (userAnswer === correctAnswer) {
+        document.getElementById('correctSound').play();
+        points++;
+        document.getElementById('points').textContent = `Points: ${points}`;
+        document.getElementById('message').textContent = "Correct!";
+        document.getElementById('splashArt').style.display = 'flex';
+
+        setTimeout(() => {
+          document.getElementById('splashArt').style.display = 'none';
+
+          if (currentVariation === variations.length - 1) {
+            showEndGameScreen();
+          } else {
+            document.getElementById('nextBtn').disabled = false;
+          }
+        }, 1500);
+
+
+        document.getElementById('submitBtn').disabled = true;
+        document.getElementById('guess').disabled = true;
+      } else {
+        document.getElementById('wrongSound').play();
+        document.getElementById('message').textContent = "Try Again!";
+        document.getElementById('wrongSplashArt').style.display = 'flex';
+
+        setTimeout(() => {
+          document.getElementById('wrongSplashArt').style.display = 'none';
+        }, 1200);
+      }
+    }
+
+    function nextProblem() {
+      currentVariation = (currentVariation + 1) % variations.length;
+      currentImageIndex = 0;
+      loadVariation();
+    }
+
+    function skipPuzzle() {
+      document.getElementById('message').textContent = `Answer was: ${variations[currentVariation].answer}`;
+
+      document.getElementById('message').textContent = "Skipped!";
+      nextProblem();
+    }
+
+    document.getElementById('guess').addEventListener('input', () => {
+      document.getElementById('submitBtn').disabled = document.getElementById('guess').value.trim() === '';
+    });
+
+    window.addEventListener('load', () => {
+      loadVariation();
+      document.body.addEventListener('click', () => {
+        const music = document.getElementById('bgMusic');
+        if (music.paused) music.play();
+      }, { once: true });
+    });
+
+function showEndGameScreen() {
+  // Hide everything else
+  document.getElementById('mainGame').style.display = 'none';
+
+  // Show the congratulations screen
+  document.getElementById('congratsScreen').style.display = 'flex';
+}
+
+  </script>
+</body>
+</html>
